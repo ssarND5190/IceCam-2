@@ -2,7 +2,13 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-img = cv2.imread('./input/logo_rhine.png', cv2.IMREAD_UNCHANGED)
+import rotate
+
+img = cv2.imread('./input/test1.png', cv2.IMREAD_UNCHANGED)
+
+angle = -30.0
+
+img = rotate.rotate_image(img, angle)
 
 sizeX = img.shape[1]
 sizeY = img.shape[0]
@@ -15,6 +21,9 @@ light_len = 0.97
 SCATTERING_POW = 4.0
 SCATTERING_STUCK = 0.001
 
+
+cv2.imwrite('./testR.png', img)
+
 # Convert the image to RGBA if it is not already
 if img.shape[2] != 4:
     img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
@@ -24,7 +33,7 @@ if img.shape[2] != 4:
 alpha_channel = img[:, :, 3]
 
 # Apply the Sobel filter in the vertical direction
-sobel_vertical = cv2.Sobel(alpha_channel, cv2.CV_64F, 0, 1, ksize=5, scale=1)
+sobel_vertical = cv2.Sobel(alpha_channel, cv2.CV_64F, 0, 1, ksize=3, scale=1)
 
 sobel_1 = np.where(sobel_vertical > 0, sobel_vertical, 0)
 sobel_1 = cv2.normalize(sobel_1, None, 0, 255, cv2.NORM_MINMAX)
